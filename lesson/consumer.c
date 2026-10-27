@@ -21,11 +21,11 @@ int main(){
   key_t key;
 
   // Generate a unique key
-  // key = ftok("/tmp", 'P');
-  // if (key == -1) {
-  //     perror("ftok");
-  //     exit(EXIT_FAILURE);
-  // }
+   key = ftok("/home/codespace", 'P');
+   if (key == -1) {
+      perror("ftok");
+       exit(EXIT_FAILURE);
+   }
   
   srand((unsigned int) getpid());  // generate random seed using process ID
   
@@ -44,7 +44,7 @@ int main(){
     exit(EXIT_FAILURE);
   }
 
-  printf("Memory attached at %X\n", sh_mem);
+  printf("Memory attached at %p\n", sh_mem);
   sh_area = (struct shm_st *)sh_mem;  // type casting
   sh_area->written = 0;
 
