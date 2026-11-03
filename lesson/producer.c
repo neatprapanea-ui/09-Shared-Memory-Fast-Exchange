@@ -6,11 +6,13 @@
 #include <sys/shm.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <stdatomic.h>
 
 #define MEM_SIZE 4096
 
 struct shm_st {
-  int written;
+  atomic_int written;
+  //int written;
   char data[BUFSIZ];
 };
 
@@ -43,16 +45,21 @@ int main() {
   }
   printf("Memory attached at %p\n", sh_mem);
   sh_area = (struct shm_st *)sh_mem;  // type casting
+  atomic_store(&sh_area->written, 0);
 
   while (running) {
+    /*
     while (sh_area->written) {  // need a delay as shm is not synchronized
       sleep(1);
       printf("Waiting...\n");
     }
+    */
+   while (atomic_load(&sh_area->written));
     printf("Enter data : ");
     fgets(buffer, BUFSIZ, stdin);
     strcpy(sh_area->data, buffer);
-    sh_area->written = 1;
+    atomic_store(&sh_area->written, 1);
+    //sh_area->written = 1;
     if (strncmp(buffer, "end", 3) == 0)
       running = 0;
   }

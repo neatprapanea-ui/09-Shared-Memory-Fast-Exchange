@@ -55,13 +55,18 @@ int task_fast_exchange(void) {
 
     if (child_pid == 0) {
         /* TODO: wait until parent marks block->ready. */
+        wait_for_ready(block);
+
         /* TODO: print: child fast read: shared memory is fast */
+        printf("child fast read: shared memory is fast");
+
         /* TODO: detach shared memory and return 0 on success. */
-        fprintf(stderr, "TODO: task_fast_exchange child path not implemented\n");
-        return 1;
+        shmdt(block);
+        return 0;
     }
 
     /* TODO: copy "shared memory is fast" into block->message. */
+    
     /* TODO: set block->ready = 1 so child can read it. */
 
     if (waitpid(child_pid, &status, 0) == -1) {

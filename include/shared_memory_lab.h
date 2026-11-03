@@ -6,7 +6,7 @@
 #define SHM_MESSAGE_CAP 16
 
 struct shared_block {
-    int ready;
+
     char message[SHM_MESSAGE_CAP];
 };
 
